@@ -1,0 +1,13 @@
+body > footer{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+body > footer > p{
+    font-family: var(--text-font-normal);
+    color: var(--c1);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
