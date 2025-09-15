@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+# این ویو فایل main.html رو نشون میده
+def show_main(request):
+    return render(request, 'main.html')

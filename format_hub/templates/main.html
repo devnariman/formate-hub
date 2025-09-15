@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,12 +11,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Format Hub</title>
 
-    <link rel="stylesheet" href="./static/main.css">
-    <link rel="stylesheet" href="./static/pannel.css">
-    <link rel="stylesheet" href="./static/video_pannel.css">
-    <link rel="stylesheet" href="./static/footer.css">
-    <link rel="stylesheet" href="./static/image_pannel.css">
-    <link rel="stylesheet" href="./static/audio_pannel.css">
+
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link rel="stylesheet" href="{% static 'pannel.css' %}">
+    <link rel="stylesheet" href="{% static 'video_pannel.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <link rel="stylesheet" href="{% static 'image_pannel.css' %}">
+    <link rel="stylesheet" href="{% static 'audio_pannel.css' %}">
 </head>
 <body>
     
@@ -102,9 +104,9 @@
         
     </footer>
 
-    <script src="static/dragANDdrop_audio.js"></script>
-    <script src="static/fragANDdrop_img.js"></script>
-    <script src="./static/pannelchoo.js"></script>
-    <script src="./static/dragANDdrop.js"></script>
+    <script src="{% static 'dragANDdrop_audio.js' %}"></script>
+    <script src="{% static 'fragANDdrop_img.js' %}"></script>
+    <script src="{% static 'pannelchoo.js' %}"></script>
+    <script src="{% static 'dragANDdrop.js' %}"></script>
 </body>
 </html>
