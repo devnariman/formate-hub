@@ -17,7 +17,6 @@ function getCookie(name) {
     return cookieValue;
 }
 
-
 // ---------------------------------------------------
 let start_pannel = document.getElementById("pannel")
 let video_pannel = document.getElementById("video_pannel")
@@ -55,9 +54,6 @@ function chooseFormat(type){
     }
 
 }
-
-
-
 
 
 
@@ -145,46 +141,43 @@ convertBtn.addEventListener("click", function(e) {
 
 
 
-
-// --------------------------------------------------------
+// ---------------------------------------------------
 // گرفتن المان‌ها
 const videoDropArea = document.getElementById("dropArea");
 const videoFileInput = document.getElementById("videoInput");
-const videoDropText = document.getElementById("video_drop_text");
-const videoConvertBtn = document.getElementById("video_Convert_btn");
+const videoDropText = document.getElementById("cideo_drop_text"); // توجه: اسم id رو از HTML گرفتم
+const videoConvertBtn = document.getElementById("video_Convert_btn"); // دکمه آپلود ویدیو
 
-// کلیک روی dropArea → باز شدن پنجره انتخاب فایل
+// وقتی روی dropArea کلیک شد، input باز بشه
 videoDropArea.addEventListener("click", () => {
     videoFileInput.click();
 });
 
-// وقتی از پنجره فایل انتخاب شد
+// وقتی فایل انتخاب شد از پنجره
 videoFileInput.addEventListener("change", (e) => {
     if (e.target.files.length > 0) {
         videoDropText.textContent = e.target.files[0].name;
     }
 });
 
-// جلوگیری از رفتار پیش‌فرض مرورگر در درگ
+// جلوگیری از رفتار پیش‌فرض مرورگر برای drag & drop
 ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
-    videoDropArea.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-    });
+    videoDropArea.addEventListener(eventName, (e) => e.preventDefault());
+    videoDropArea.addEventListener(eventName, (e) => e.stopPropagation());
 });
 
-// وقتی فایل روی dropArea درگ شد
+// وقتی فایلی درگ شد روش
 videoDropArea.addEventListener("drop", (e) => {
     const files = e.dataTransfer.files;
     if (files.length > 0) {
         videoDropText.textContent = files[0].name;
-        videoFileInput.files = files; // فایل رو تو input هم ست کن
+        videoFileInput.files = files; // ست کردن به input تا بتونی بعدا آپلودش کنی
     }
 });
 
-// آپلود فایل و ریدایرکت
+// آپلود فایل و تغییر href
 videoConvertBtn.addEventListener("click", function(e) {
-    e.preventDefault();
+    e.preventDefault(); // جلوگیری از پرش صفحه
 
     if (videoFileInput.files.length === 0) {
         alert("Please select a video file first.");
@@ -193,12 +186,11 @@ videoConvertBtn.addEventListener("click", function(e) {
 
     const file = videoFileInput.files[0];
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("video", file);
 
-    fetch("/upload_video", {
+    fetch("/upload_video/", { // مسیر سرور برای ویدیو
         method: "POST",
-        body: formData
-        ,
+        body: formData,
     headers: {
         'X-CSRFToken': getCookie('csrftoken')  // حتماً کلید همین باشه
     },
@@ -206,18 +198,14 @@ videoConvertBtn.addEventListener("click", function(e) {
     })
     .then(response => response.json())
     .then(data => {
-        // بعد از آپلود موفق
-        window.location.href = `/sending/${data.filename}/${video_type}`; 
+        // بعد از آپلود موفق، ریدایرکت
+        // دقت کن که video_type باید قبل از این تعریف شود یا ثابت باشه
+        window.location.href = `/sending_video/${data.filename}/${video_type}`;
     })
     .catch(() => {
         alert("Error uploading video.");
     });
 });
-
-
-
-
-
 
 
 
@@ -286,7 +274,6 @@ audioConvertBtn.addEventListener("click", function(e) {
         'X-CSRFToken': getCookie('csrftoken')  // حتماً کلید همین باشه
     },
     credentials: 'same-origin'  // اضافه کن تا کوکی‌ها ارسال بشن
-        
     })
     .then(response => response.json())
     .then(data => {
@@ -297,6 +284,20 @@ audioConvertBtn.addEventListener("click", function(e) {
         alert("Error uploading audio.");
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // --------------------------------------------------------
 jpg_checkbox = document.getElementById("jpg_checkbox");
 png_checkbox = document.getElementById("png_checkbox");

@@ -62,3 +62,25 @@ def upload_audio(request):
     return JsonResponse({'status': 'fail'}, status=400)
 
 
+
+def upload_video(request):
+    if request.method == 'POST' and request.FILES.get('video'):
+        uploaded_file = request.FILES['video']
+        
+        # مسیر پوشه video داخل media
+        video_folder = os.path.join(settings.MEDIA_ROOT, 'video')
+        os.makedirs(video_folder, exist_ok=True)  # ایجاد پوشه اگر وجود نداشت
+        
+        # مسیر نهایی فایل
+        save_path = os.path.join(video_folder, uploaded_file.name)
+        
+        # ذخیره فایل
+        with open(save_path, 'wb+') as destination:
+            for chunk in uploaded_file.chunks():
+                destination.write(chunk)
+        
+        # پاسخ موفق
+        return JsonResponse({'status': 'success', 'filename': uploaded_file.name})
+    
+    # اگر درخواست POST نبود یا فایل وجود نداشت
+    return JsonResponse({'status': 'fail'}, status=400)
