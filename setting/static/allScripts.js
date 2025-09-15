@@ -123,7 +123,11 @@ convertBtn.addEventListener("click", function(e) {
     .then(response => response.json())
     .then(data => {
         // بعد از آپلود موفق، ریدایرکت به صفحه test
+        if (image_type == ""){
+            alert("select audio format to convert !");
+        }else{
         window.location.href = `/sending/${data.filename}/${image_type}`;
+        }
     })
     .catch(() => {
         alert("Error uploading file.");
@@ -200,7 +204,11 @@ videoConvertBtn.addEventListener("click", function(e) {
     .then(data => {
         // بعد از آپلود موفق، ریدایرکت
         // دقت کن که video_type باید قبل از این تعریف شود یا ثابت باشه
+        if (video_type == ""){
+            alert("select audio format to convert !");
+        }else{
         window.location.href = `/sending_video/${data.filename}/${video_type}`;
+        }
     })
     .catch(() => {
         alert("Error uploading video.");
@@ -278,7 +286,11 @@ audioConvertBtn.addEventListener("click", function(e) {
     .then(response => response.json())
     .then(data => {
         // بعد از آپلود موفق
+        if (audio_type == ""){
+            alert("select audio format to convert !");
+        }else{
         window.location.href = `/sending/${data.filename}/${audio_type}`; 
+        }
     })
     .catch(() => {
         alert("Error uploading audio.");

@@ -3,20 +3,10 @@ from django.http import JsonResponse
 import os
 from django.conf import settings
 
+
+
 def show_main(request):
     return render(request, 'main.html')
-
-# def upload_image(request):
-#     if request.method == 'POST' and request.FILES.get('file'):
-#         uploaded_file = request.FILES['file']
-#         save_path = os.path.join(settings.MEDIA_ROOT, uploaded_file.name)
-#         os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
-#         with open(save_path, 'wb+') as destination:
-#             for chunk in uploaded_file.chunks():
-#                 destination.write(chunk)
-#         return JsonResponse({'status': 'success', 'filename': uploaded_file.name})
-#     return JsonResponse({'status': 'fail'}, status=400)
-
 
 
 def upload_image(request):
