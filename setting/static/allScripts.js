@@ -1,6 +1,23 @@
 video_type = ""
 image_type = ""
 audio_type = ""
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
 // ---------------------------------------------------
 let start_pannel = document.getElementById("pannel")
 let video_pannel = document.getElementById("video_pannel")
@@ -38,6 +55,20 @@ function chooseFormat(type){
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ---------------------------------------------------
 const dropArea = document.getElementById("dropArea_img");
 const fileInput = document.getElementById("imageInput");
@@ -82,12 +113,16 @@ convertBtn.addEventListener("click", function(e) {
 
     const file = fileInput.files[0];
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append("file", file);
 
     // حالا فایل رو بفرست
-    fetch("/upload_image", {
+    fetch("/upload_image/", {
         method: "POST",
-        body: formData
+        body: formData,
+    headers: {
+        'X-CSRFToken': getCookie('csrftoken')  // حتماً کلید همین باشه
+    },
+    credentials: 'same-origin'  // اضافه کن تا کوکی‌ها ارسال بشن
     })
     .then(response => response.json())
     .then(data => {
@@ -98,6 +133,19 @@ convertBtn.addEventListener("click", function(e) {
         alert("Error uploading file.");
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 // --------------------------------------------------------
 // گرفتن المان‌ها
 const videoDropArea = document.getElementById("dropArea");
@@ -145,11 +193,16 @@ videoConvertBtn.addEventListener("click", function(e) {
 
     const file = videoFileInput.files[0];
     const formData = new FormData();
-    formData.append("video", file);
+    formData.append("file", file);
 
     fetch("/upload_video", {
         method: "POST",
         body: formData
+        ,
+    headers: {
+        'X-CSRFToken': getCookie('csrftoken')  // حتماً کلید همین باشه
+    },
+    credentials: 'same-origin'  // اضافه کن تا کوکی‌ها ارسال بشن
     })
     .then(response => response.json())
     .then(data => {
@@ -160,6 +213,23 @@ videoConvertBtn.addEventListener("click", function(e) {
         alert("Error uploading video.");
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // --------------------------------------------------------
 // گرفتن المان‌ها
 const audioDropArea = document.getElementById("dropArea_audio");
@@ -209,9 +279,14 @@ audioConvertBtn.addEventListener("click", function(e) {
     const formData = new FormData();
     formData.append("audio", file);
 
-    fetch("/upload_audio", {
+    fetch("/upload_audio/", {
         method: "POST",
-        body: formData
+        body: formData,
+    headers: {
+        'X-CSRFToken': getCookie('csrftoken')  // حتماً کلید همین باشه
+    },
+    credentials: 'same-origin'  // اضافه کن تا کوکی‌ها ارسال بشن
+        
     })
     .then(response => response.json())
     .then(data => {

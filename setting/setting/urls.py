@@ -21,4 +21,7 @@ from format_hub import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('main/', views.show_main, name='show_main'),
+    path('upload_image/', views.upload_image, name='upload_image'),
+    path('upload_audio/', views.upload_audio, name='upload_audio'),
+    path('upload_video/', views.upload_video, name='upload_video'),
 ]
