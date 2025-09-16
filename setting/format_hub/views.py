@@ -11,14 +11,46 @@ class convertor():
         self.format = formate
         self.type = all_type
         self.path = self.get_input_path()
-        # self.download_path = 
+        self.download_file = os.path.join(settings.MEDIA_ROOT, 'download')
+        self.status = self.test_file()
+        self.ext = os.path.splitext(self.f_name)[1]
+        self.ext = self.ext[1:]
+        if self.ext == "png":
+            self.convert_to_jpg()
+        
+
+
+    def test_file(self):
+        if os.path.exists(self.path):
+            return True
+        else:
+            return False
+        
+
+    def convert_to_jpg(self):
+    # باز کردن عکس
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        file_name = name_only = os.path.splitext(self.f_name)[0]
+        file_name = file_name + ".jpg"
+        out_put = os.path.join(add, file_name)
+        img = Image.open(self.path)
+        rgb_img = img.convert("RGB")   # JPG از شفافیت (alpha channel) پشتیبانی نمی‌کنه
+        rgb_img.save(out_put, "JPEG")
+                
 
     def get_input_path(self):
         if self.type == "image":
             image_folder = os.path.join(settings.MEDIA_ROOT, 'image')
             file_path = os.path.join(image_folder, self.f_name)
             return file_path
-    
+        elif self.type == "video":
+            image_folder = os.path.join(settings.MEDIA_ROOT, 'video')
+            file_path = os.path.join(image_folder, self.f_name)
+            return file_path
+        elif self.type == "audio":
+            image_folder = os.path.join(settings.MEDIA_ROOT, 'audio')
+            file_path = os.path.join(image_folder, self.f_name)
+            return file_path   
 
 
 
@@ -30,18 +62,8 @@ def show_sending(request, file_name,all_type, format):
 
 
     time.sleep(1)
-    image_folder = os.path.join(settings.MEDIA_ROOT, 'image')
-    file_path = os.path.join(image_folder, file_name)  # اینجا اسم دقیق فایل
-
-    
-    if os.path.exists(file_path):
-        print("File exists ✅")
-    else:
-        print("File does not exist ❌")
-
-
     a = convertor(file_name , all_type, format)
-    print(a.path) 
+ 
     return render(request, 'sending.html')
 
 
