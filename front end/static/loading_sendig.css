@@ -1,0 +1,135 @@
+.sending_page{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+    background: none;
+}
+
+.loading-widget {
+      position: relative;
+      width: fit-content;
+      height: fit-content;
+    }
+.loading-widget > h2 {
+  font-family: var(--text-font-normal);
+  color: var(--c1);
+}
+    /* دایره اصلی */
+    .circle {
+      width: 6rem;
+      height: 6rem;
+      border-radius: 50%;
+      background: conic-gradient(#4ade80 0deg, #1e293b 0deg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 20px rgba(74, 222, 128, 0.6);
+      animation: pulse 2s infinite;
+    }
+
+    /* متن داخل دایره */
+    .circle span {
+      font-size: 1.5rem;
+      font-weight: bold;
+      font-family: var(--text-font2);
+      color: var(--c3);
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 15px rgba(74, 222, 128, 0.6); }
+      50% { box-shadow: 0 0 30px rgba(74, 222, 128, 0.9); }
+    }
+    .hidden {
+      display: none;
+    }
+
+
+.big_ads_up{
+    width: 100%;
+    height: 40%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+
+
+
+
+.big_ads_down{
+    width: 100%;
+    height: 40%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+
+
+
+
+
+
+
+footer{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+footer > p{
+    font-family: var(--text-font-normal);
+    color: var(--c1);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.target_file{
+  width: 70%;
+  height: 6rem;
+  border-radius: 2rem;
+  display: none;
+  background-color: var(--c1);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.target_file_show{
+  display: flex;
+}
+
+.target_file > .file_download{
+  background-color: var(--c2);
+  width: 10rem;
+  height: 2rem;
+  display: flex;
+  color: var(--c3);
+  font-weight: bolder;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--text-font-normal);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: 200ms;
+}
+.target_file > .file_download:hover{
+  width: 15rem;
+  font-size: 1.2rem;
+  background-color: var(--c3);
+  color: var(--c2);
+  transition: 200ms;
+}
+.target_file > .temp_link{
+  display: none;
+}
+.target_file > h3{
+  font-size: 1.2rem;
+  color: var(--c2);
+  font-family: var(--text-font-normal);
+}
