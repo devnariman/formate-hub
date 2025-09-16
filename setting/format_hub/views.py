@@ -25,7 +25,8 @@ class convertor():
                     self.result_path = self.convert_to_gif()
                 elif self.format == "bmp":
                     self.result_path = self.convert_to_bmp()
-        
+            elif self.ext == "jpg":
+                print(True)
         else:
             None
 
