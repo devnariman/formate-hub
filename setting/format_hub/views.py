@@ -15,9 +15,19 @@ class convertor():
         self.status = self.test_file()
         self.ext = os.path.splitext(self.f_name)[1]
         self.ext = self.ext[1:]
-        if self.ext == "png":
-            self.convert_to_jpg()
+        if self.status == True:
+            if self.ext == "png":
+                if self.format == "jpg":
+                    self.result_path = self.convert_to_jpg()
+                elif self.format == "png":
+                    self.result_path = self.path
+                elif self.format == "gif":
+                    self.result_path = self.convert_to_gif()
+                elif self.format == "bmp":
+                    self.result_path = self.convert_to_bmp()
         
+        else:
+            None
 
 
     def test_file(self):
@@ -28,7 +38,6 @@ class convertor():
         
 
     def convert_to_jpg(self):
-    # باز کردن عکس
         add = os.path.join(settings.MEDIA_ROOT, 'download')
         file_name = name_only = os.path.splitext(self.f_name)[0]
         file_name = file_name + ".jpg"
@@ -36,7 +45,39 @@ class convertor():
         img = Image.open(self.path)
         rgb_img = img.convert("RGB")   # JPG از شفافیت (alpha channel) پشتیبانی نمی‌کنه
         rgb_img.save(out_put, "JPEG")
+        return out_put
                 
+
+    def convert_to_gif(self):
+        # مسیر پوشه خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        # اسم فایل بدون پسوند
+        file_name = os.path.splitext(self.f_name)[0] + ".gif"
+        # مسیر نهایی خروجی
+        out_put = os.path.join(add, file_name)
+        # باز کردن تصویر
+        img = Image.open(self.path)
+        # برای GIF بهتره RGB باشه، ولی اگه شفافیت میخوای RGBA بذار
+        rgb_img = img.convert("RGBA")
+        # ذخیره به صورت GIF
+        rgb_img.save(out_put, "GIF")
+        return out_put
+
+    def convert_to_bmp(self):
+        # مسیر پوشه خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        # اسم فایل بدون پسوند + پسوند BMP
+        file_name = os.path.splitext(self.f_name)[0] + ".bmp"
+        # مسیر نهایی خروجی
+        out_put = os.path.join(add, file_name)
+        # باز کردن تصویر
+        img = Image.open(self.path)
+        # تبدیل به RGB چون BMP شفافیت نمی‌تونه داشته باشه
+        rgb_img = img.convert("RGB")
+        # ذخیره به صورت BMP
+        rgb_img.save(out_put, "BMP")
+        return out_put
+    
 
     def get_input_path(self):
         if self.type == "image":
@@ -59,15 +100,9 @@ def show_main(request):
 
 
 def show_sending(request, file_name,all_type, format):
-
-
     time.sleep(1)
-    a = convertor(file_name , all_type, format)
- 
+    a = convertor(file_name , all_type , format)
     return render(request, 'sending.html')
-
-
-
 
 
 
