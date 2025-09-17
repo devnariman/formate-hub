@@ -39,8 +39,12 @@ class convertor():
                 print(True)
                 print(self.ext)
                 print(self.format)
-
-                
+            elif self.type == "audio":
+                print(False)
+                print(self.ext)
+                print(self.format)
+            else:
+                None
         else:
             None
 
