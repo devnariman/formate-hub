@@ -55,6 +55,7 @@ function chooseFormat(type){
         audio_pannel.classList.add("active")
         all_type = "audio"
     }
+    console.log(all_type)
 
 }
 
@@ -203,7 +204,7 @@ videoConvertBtn.addEventListener("click", function(e) {
     .then(data => {
         // بعد از آپلود موفق، ریدایرکت
         // دقت کن که video_type باید قبل از این تعریف شود یا ثابت باشه
-        window.location.href = `/sending/${data.filename}/${all_type}/${image_type}/`;
+        window.location.href = `/sending/${data.filename}/${all_type}/${video_type}/`;
     })
     .catch(() => {
         alert("Error uploading video.");
@@ -281,7 +282,7 @@ audioConvertBtn.addEventListener("click", function(e) {
     .then(response => response.json())
     .then(data => {
         // بعد از آپلود موفق
-        window.location.href = `/sending/${data.filename}/${all_type}/${image_type}/`;
+        window.location.href = `/sending/${data.filename}/${all_type}/${audio_type}/`;
     })
     .catch(() => {
         alert("Error uploading audio.");

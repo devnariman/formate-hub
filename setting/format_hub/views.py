@@ -16,17 +16,31 @@ class convertor():
         self.ext = os.path.splitext(self.f_name)[1]
         self.ext = self.ext[1:]
         if self.status == True:
-            if self.ext == "png":
-                if self.format == "jpg":
-                    self.result_path = self.convert_to_jpg()
-                elif self.format == "png":
-                    self.result_path = self.path
-                elif self.format == "gif":
-                    self.result_path = self.convert_to_gif()
-                elif self.format == "bmp":
-                    self.result_path = self.convert_to_bmp()
-            elif self.ext == "jpg":
+            if self.type == "image":
+                if self.ext == "png":
+                    if self.format == "jpg":
+                        self.result_path = self.convert_to_jpg()
+                    elif self.format == "png":
+                        self.result_path = self.path
+                    elif self.format == "gif":
+                        self.result_path = self.convert_to_gif()
+                    elif self.format == "bmp":
+                        self.result_path = self.convert_to_bmp()
+                elif self.ext == "jpg":
+                    if self.format == "png":
+                        self.result_path = self.convert_to_png()
+                    elif self.format == "jpg":
+                        self.result_path = self.path
+                    elif self.format == "gif":
+                        self.result_path = self.convert_to_gif()
+                    elif self.format == "bmp":
+                        self.result_path = self.convert_to_bmp()
+            elif self.type == "video":
                 print(True)
+                print(self.ext)
+                print(self.format)
+
+                
         else:
             None
 
@@ -37,6 +51,27 @@ class convertor():
         else:
             return False
         
+
+    def convert_to_png(self):
+        # مسیر پوشه خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+
+        # اسم فایل بدون پسوند + پسوند PNG
+        file_name = os.path.splitext(self.f_name)[0] + ".png"
+
+        # مسیر نهایی خروجی
+        out_put = os.path.join(add, file_name)
+
+        # باز کردن تصویر
+        img = Image.open(self.path)
+
+        # JPG → PNG (تبدیل به RGB برای سازگاری)
+        rgb_img = img.convert("RGB")
+
+        # ذخیره به صورت PNG
+        rgb_img.save(out_put, "PNG")
+
+        return out_put
 
     def convert_to_jpg(self):
         add = os.path.join(settings.MEDIA_ROOT, 'download')
@@ -79,7 +114,6 @@ class convertor():
         rgb_img.save(out_put, "BMP")
         return out_put
     
-
     def get_input_path(self):
         if self.type == "image":
             image_folder = os.path.join(settings.MEDIA_ROOT, 'image')

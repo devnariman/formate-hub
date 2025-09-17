@@ -55,6 +55,7 @@ function chooseFormat(type){
         audio_pannel.classList.add("active")
         all_type = "audio"
     }
+    console.log(all_type)
 
 }
 
@@ -115,7 +116,7 @@ convertBtn.addEventListener("click", function(e) {
     formData.append("file", file);
 
     // حالا فایل رو بفرست
-    fetch("/upload_image", {
+    fetch("/upload_image/", {
         method: "POST",
         body: formData,
     headers: {
@@ -126,7 +127,7 @@ convertBtn.addEventListener("click", function(e) {
     .then(response => response.json())
     .then(data => {
         // بعد از آپلود موفق، ریدایرکت به صفحه test
-        window.location.href = `/sending/${data.filename}/${all_type}/${image_type}`;
+        window.location.href = `/sending/${data.filename}/${all_type}/${image_type}/`;
     })
     .catch(() => {
         alert("Error uploading file.");
@@ -191,7 +192,7 @@ videoConvertBtn.addEventListener("click", function(e) {
     const formData = new FormData();
     formData.append("video", file);
 
-    fetch("/upload_video", { // مسیر سرور برای ویدیو
+    fetch("/upload_video/", { // مسیر سرور برای ویدیو
         method: "POST",
         body: formData,
     headers: {
@@ -203,7 +204,7 @@ videoConvertBtn.addEventListener("click", function(e) {
     .then(data => {
         // بعد از آپلود موفق، ریدایرکت
         // دقت کن که video_type باید قبل از این تعریف شود یا ثابت باشه
-        window.location.href = `/sending/${data.filename}/${all_type}/${image_type}`;
+        window.location.href = `/sending/${data.filename}/${all_type}/${image_type}/`;
     })
     .catch(() => {
         alert("Error uploading video.");
@@ -270,7 +271,7 @@ audioConvertBtn.addEventListener("click", function(e) {
     const formData = new FormData();
     formData.append("audio", file);
 
-    fetch("/upload_audio", {
+    fetch("/upload_audio/", {
         method: "POST",
         body: formData,
     headers: {
@@ -281,7 +282,7 @@ audioConvertBtn.addEventListener("click", function(e) {
     .then(response => response.json())
     .then(data => {
         // بعد از آپلود موفق
-        window.location.href = `/sending/${data.filename}/${all_type}/${image_type}`;
+        window.location.href = `/sending/${data.filename}/${all_type}/${image_type}/`;
     })
     .catch(() => {
         alert("Error uploading audio.");
