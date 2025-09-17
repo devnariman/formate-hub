@@ -38,9 +38,24 @@ class convertor():
                         self.result_path = self.convert_to_gif()
                     elif self.format == "bmp":
                         self.result_path = self.convert_to_bmp()
-
-                
-            
+                elif self.ext == "gif":
+                    if self.format == "png":
+                        self.result_path = self.convert_gif_to_png()
+                    elif self.format == "jpg":
+                        self.result_path = self.convert_gif_to_jpg()
+                    elif self.format == "gif":
+                        self.result_path = self.path
+                    elif self.format == "bmp":
+                        self.result_path = self.convert_gif_to_bmp()
+                elif self.ext == "bmp":
+                    if self.format == "png":
+                        self.result_path = self.convert_bmp_to_png()
+                    elif self.format == "jpg":
+                        self.result_path = self.convert_bmp_to_jpg()
+                    elif self.format == "gif":
+                        self.result_path = self.convert_bmp_to_gif()
+                    elif self.format == "bmp":
+                        self.result_path = self.path
             elif self.type == "video":
                 if self.ext == "mp4":
                     if self.format == "MKV":
@@ -78,15 +93,404 @@ class convertor():
                         self.result_path = self.convert_avi_to_mov()
                     elif self.format == "mkv":
                         self.result_path = self.convert_avi_to_mkv()
-
             elif self.type == "audio":
-                print(False)
-                print(self.ext)
-                print(self.format)
+                if self.ext == "mp3":
+                    if self.format == "mp3":
+                        self.result_path = self.path
+                    elif self.format == "wav":
+                        self.result_path = self.convert_mp3_to_wav()
+                    elif self.format == "ogg":
+                        self.result_path = self.convert_mp3_to_ogg()
+                    elif self.format == "flac":
+                        self.result_path = self.convert_mp3_to_flac()
+                elif self.ext == "wav":
+                    if self.format == "mp3":
+                        self.result_path = self.convert_wav_to_mp3()
+                    elif self.format == "wav":
+                        self.result_path = self.path
+                    elif self.format == "ogg":
+                        self.result_path = self.convert_wav_to_ogg()
+                    elif self.format == "flac":
+                        self.result_path = self.convert_wav_to_flac()
+                elif self.ext == "ogg":
+                    if self.format == "mp3":
+                        self.result_path = self.convert_ogg_to_mp3()
+                    elif self.format == "wav":
+                        self.result_path = self.convert_ogg_to_wav()
+                    elif self.format == "ogg":
+                        self.result_path = self.path
+                    elif self.format == "flac":
+                        self.result_path = self.convert_ogg_to_flac()
+                elif self.ext == "flac":
+                    if self.format == "mp3":
+                        self.result_path = self.convert_flac_to_mp3()
+                    elif self.format == "wav":
+                        self.result_path = self.convert_flac_to_wav()
+                    elif self.format == "ogg":
+                        self.result_path = self.convert_flac_to_ogg()
+                    elif self.format == "flac":
+                        self.result_path = self.path
+
+            
             else:
                 None
         else:
             None
+
+    def convert_flac_to_mp3(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی با پسوند .mp3
+        file_name = os.path.splitext(self.f_name)[0] + ".mp3"
+        output_path = os.path.join(add, file_name)
+
+        # اجرای ffmpeg برای تبدیل FLAC به MP3
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,        # ورودی FLAC
+            "-c:a", "libmp3lame",   # کدک MP3
+            "-q:a", "2",            # کیفیت خروجی (0 بهترین، 9 بدترین)
+            output_path
+        ], check=True)
+
+        return output_path
+
+    def convert_flac_to_wav(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی با پسوند .wav
+        file_name = os.path.splitext(self.f_name)[0] + ".wav"
+        output_path = os.path.join(add, file_name)
+
+        # اجرای ffmpeg برای تبدیل FLAC به WAV
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,   # ورودی FLAC
+            output_path        # خروجی WAV
+        ], check=True)
+
+        return output_path
+
+    def convert_flac_to_ogg(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی با پسوند .ogg
+        file_name = os.path.splitext(self.f_name)[0] + ".ogg"
+        output_path = os.path.join(add, file_name)
+
+        # اجرای ffmpeg برای تبدیل FLAC به OGG
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,       # ورودی FLAC
+            "-c:a", "libvorbis",   # کدک OGG (Vorbis)
+            output_path
+        ], check=True)
+
+        return output_path
+
+
+    def convert_wav_to_ogg(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی با پسوند .ogg
+        file_name = os.path.splitext(self.f_name)[0] + ".ogg"
+        output_path = os.path.join(add, file_name)
+
+        # اجرای ffmpeg برای تبدیل WAV به OGG
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,       # ورودی WAV
+            "-c:a", "libvorbis",   # کدک OGG (Vorbis)
+            output_path
+        ], check=True)
+
+        return output_path
+
+    def convert_wav_to_flac(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی با پسوند .flac
+        file_name = os.path.splitext(self.f_name)[0] + ".flac"
+        output_path = os.path.join(add, file_name)
+
+        # اجرای ffmpeg برای تبدیل WAV به FLAC
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,   # ورودی WAV
+            "-c:a", "flac",    # کدک FLAC
+            output_path
+        ], check=True)
+
+        return output_path
+
+    def convert_ogg_to_mp3(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی با پسوند .mp3
+        file_name = os.path.splitext(self.f_name)[0] + ".mp3"
+        output_path = os.path.join(add, file_name)
+
+        # اجرای ffmpeg برای تبدیل OGG به MP3
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,        # ورودی OGG
+            "-c:a", "libmp3lame",   # کدک MP3
+            "-q:a", "2",            # کیفیت خروجی (0 بهترین، 9 بدترین)
+            output_path
+        ], check=True)
+
+        return output_path
+
+    def convert_ogg_to_wav(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی با پسوند .wav
+        file_name = os.path.splitext(self.f_name)[0] + ".wav"
+        output_path = os.path.join(add, file_name)
+
+        # اجرای ffmpeg برای تبدیل OGG به WAV
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,   # ورودی OGG
+            output_path        # خروجی WAV
+        ], check=True)
+
+        return output_path
+
+    def convert_ogg_to_flac(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی با پسوند .flac
+        file_name = os.path.splitext(self.f_name)[0] + ".flac"
+        output_path = os.path.join(add, file_name)
+
+        # اجرای ffmpeg برای تبدیل OGG به FLAC
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,   # ورودی OGG
+            "-c:a", "flac",    # کدک FLAC
+            output_path
+        ], check=True)
+
+        return output_path
+
+
+    def convert_mp3_to_flac(self):
+        # مسیر پوشه خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی با پسوند .flac
+        file_name = os.path.splitext(self.f_name)[0] + ".flac"
+        output_path = os.path.join(add, file_name)
+
+        # اجرای ffmpeg برای تبدیل MP3 به FLAC
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,      # ورودی MP3
+            "-c:a", "flac",       # کدک FLAC
+            output_path
+        ], check=True)
+
+        return output_path
+
+    def convert_wav_to_mp3(self):
+        # مسیر پوشه خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی با پسوند .mp3
+        file_name = os.path.splitext(self.f_name)[0] + ".mp3"
+        output_path = os.path.join(add, file_name)
+
+        # اجرای ffmpeg برای تبدیل WAV به MP3
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,        # ورودی WAV
+            "-c:a", "libmp3lame",   # کدک MP3
+            "-q:a", "2",            # کیفیت خروجی (0 بهترین، 9 بدترین)
+            output_path
+        ], check=True)
+
+        return output_path
+
+
+    def convert_mp3_to_ogg(self):
+        # مسیر پوشه خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی با پسوند .ogg
+        file_name = os.path.splitext(self.f_name)[0] + ".ogg"
+        output_path = os.path.join(add, file_name)
+
+        # اجرای ffmpeg برای تبدیل MP3 به OGG
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,    # ورودی MP3
+            "-c:a", "libvorbis", # کدک OGG (Vorbis)
+            output_path
+        ], check=True)
+
+        return output_path
+
+
+    def convert_mp3_to_wav(self):
+        # مسیر پوشه خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی با پسوند .wav
+        file_name = os.path.splitext(self.f_name)[0] + ".wav"
+        output_path = os.path.join(add, file_name)
+
+        # اجرای ffmpeg برای تبدیل MP3 به WAV
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,   # ورودی MP3
+            output_path        # خروجی WAV
+        ], check=True)
+
+        return output_path
+
+    def convert_bmp_to_gif(self):
+        # مسیر پوشه خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی (هم‌نام فایل ورودی، ولی با پسوند .gif)
+        file_name = os.path.splitext(self.f_name)[0] + ".gif"
+        output_path = os.path.join(add, file_name)
+
+        # باز کردن تصویر (BMP)
+        img = Image.open(self.path)
+
+        # تبدیل به پالت رنگی برای GIF
+        gif_img = img.convert("P", palette=Image.ADAPTIVE)
+
+        # ذخیره به صورت GIF
+        gif_img.save(output_path, "GIF")
+
+        return output_path
+
+
+    def convert_bmp_to_jpg(self):
+        # مسیر پوشه خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی (هم‌نام فایل ورودی، ولی با پسوند .jpg)
+        file_name = os.path.splitext(self.f_name)[0] + ".jpg"
+        output_path = os.path.join(add, file_name)
+
+        # باز کردن تصویر (BMP)
+        img = Image.open(self.path)
+
+        # چون JPG شفافیت رو پشتیبانی نمی‌کنه → تبدیل به RGB
+        rgb_img = img.convert("RGB")
+
+        # ذخیره به صورت JPG
+        rgb_img.save(output_path, "JPEG")
+
+        return output_path
+
+
+    def convert_bmp_to_png(self):
+        # مسیر پوشه خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی (هم‌نام فایل ورودی، ولی با پسوند .png)
+        file_name = os.path.splitext(self.f_name)[0] + ".png"
+        output_path = os.path.join(add, file_name)
+
+        # باز کردن تصویر (BMP)
+        img = Image.open(self.path)
+
+        # تبدیل به RGB برای سازگاری (اگر 8bit باشه هم درست میشه)
+        rgb_img = img.convert("RGB")
+
+        # ذخیره به صورت PNG
+        rgb_img.save(output_path, "PNG")
+
+        return output_path
+
+
+
+    def convert_gif_to_bmp(self):
+        # مسیر پوشه خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی (هم‌نام فایل ورودی، ولی با پسوند .bmp)
+        file_name = os.path.splitext(self.f_name)[0] + ".bmp"
+        output_path = os.path.join(add, file_name)
+
+        # باز کردن تصویر (GIF)
+        img = Image.open(self.path)
+
+        # چون BMP شفافیت نداره → تبدیل به RGB
+        rgb_img = img.convert("RGB")
+
+        # ذخیره به صورت BMP
+        rgb_img.save(output_path, "BMP")
+
+        return output_path
+
+
+    def convert_gif_to_jpg(self):
+        # مسیر پوشه خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل خروجی
+        file_name = os.path.splitext(self.f_name)[0] + ".jpg"
+        output_path = os.path.join(add, file_name)
+
+        # باز کردن تصویر
+        img = Image.open(self.path)
+
+        # تبدیل به RGB چون JPG شفافیت نداره
+        rgb_img = img.convert("RGB")
+
+        # ذخیره به صورت JPG
+        rgb_img.save(output_path, "JPEG")
+
+        return output_path
+
+
+    def convert_gif_to_png(self):
+        # مسیر پوشه خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل بدون پسوند + پسوند PNG
+        file_name = os.path.splitext(self.f_name)[0] + ".png"
+        output_path = os.path.join(add, file_name)
+
+        # باز کردن تصویر
+        img = Image.open(self.path)
+
+        # ذخیره به صورت PNG
+        img.save(output_path, "PNG")
+
+        return output_path
 
     def convert_avi_to_mkv(self):
         # مسیر فولدر خروجی
@@ -407,7 +811,12 @@ class convertor():
             file_path = os.path.join(image_folder, self.f_name)
             return file_path   
 
-
+    def remove_this_file(self):
+        if os.path.isfile(self.path):
+            os.remove(self.path)
+            print(f"{self.path} حذف شد.")
+        else:
+            print(f"{self.path} وجود ندارد یا فایل نیست.")
 
 def show_main(request):
     return render(request, 'main.html')
@@ -416,6 +825,12 @@ def show_main(request):
 def show_sending(request, file_name,all_type, format):
     time.sleep(1)
     a = convertor(file_name , all_type , format)
+
+    # print(f"status = {a.status}")
+    # print(f"out put addres = {a.result_path}")
+    a.remove_this_file()
+    # print(f"addres = {a.path} removed !")
+
     return render(request, 'sending.html')
 
 
