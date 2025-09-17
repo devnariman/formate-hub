@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 import os
 from django.conf import settings
+import subprocess
 import time
 from PIL import Image
 
@@ -16,6 +17,8 @@ class convertor():
         self.ext = os.path.splitext(self.f_name)[1]
         self.ext = self.ext[1:]
         if self.status == True:
+
+
             if self.type == "image":
                 if self.ext == "png":
                     if self.format == "jpg":
@@ -35,10 +38,47 @@ class convertor():
                         self.result_path = self.convert_to_gif()
                     elif self.format == "bmp":
                         self.result_path = self.convert_to_bmp()
+
+                
+            
             elif self.type == "video":
-                print(True)
-                print(self.ext)
-                print(self.format)
+                if self.ext == "mp4":
+                    if self.format == "MKV":
+                        self.result_path = self.convert_mp4_to_mkv()
+                    elif self.format == "AVI":
+                        self.result_path = self.convert_mp4_to_avi()
+                    elif self.format == "MOV":
+                        self.result_path = self.convert_mp4_to_mov()
+                    elif self.format == "mp4":
+                        self.result_path = self.path
+                elif self.ext == "mkv":
+                    if self.format == "mp4":
+                        self.result_path = self.convert_mkv_to_mp4()
+                    elif self.format == "AVI":
+                        self.result_path = self.convert_mkv_to_avi()
+                    elif self.format == "MOV":
+                        self.result_path = self.convert_mkv_to_mov()
+                    elif self.format == "mkv":
+                        self.result_path = self.path
+                elif self.ext == "mov":
+                    if self.format == "mp4":
+                        self.result_path = self.convert_mov_to_mp4()
+                    elif self.format == "AVI":
+                        self.result_path = self.convert_mov_to_avi()
+                    elif self.format == "MOV":
+                        self.result_path = self.path
+                    elif self.format == "mkv":
+                        self.result_path = self.convert_mov_to_mkv()
+                elif self.ext == "avi":
+                    if self.format == "mp4":
+                        self.result_path = self.convert_avi_to_mp4()
+                    elif self.format == "AVI":
+                        self.result_path = self.path
+                    elif self.format == "MOV":
+                        self.result_path = self.convert_avi_to_mov()
+                    elif self.format == "mkv":
+                        self.result_path = self.convert_avi_to_mkv()
+
             elif self.type == "audio":
                 print(False)
                 print(self.ext)
@@ -48,6 +88,202 @@ class convertor():
         else:
             None
 
+    def convert_avi_to_mkv(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل بدون پسوند + پسوند mkv
+        file_name = os.path.splitext(self.f_name)[0] + ".mkv"
+        output_path = os.path.join(add, file_name)
+
+        # re-encode برای سازگاری کامل
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,
+            "-c:v", "libx264",  # ویدیو → H.264
+            "-c:a", "aac",      # صدا → AAC
+            output_path
+        ], check=True)
+
+        return output_path
+
+    def convert_mov_to_mkv(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل بدون پسوند + پسوند mkv
+        file_name = os.path.splitext(self.f_name)[0] + ".mkv"
+        output_path = os.path.join(add, file_name)
+
+        # دستور ffmpeg برای تغییر فرمت
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,    # مسیر فایل ورودی MOV
+            "-c", "copy",       # فقط تغییر container بدون encode دوباره
+            output_path
+        ], check=True)
+
+        return output_path
+
+    def convert_avi_to_mov(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل بدون پسوند + پسوند mov
+        file_name = os.path.splitext(self.f_name)[0] + ".mov"
+        output_path = os.path.join(add, file_name)
+
+        # re-encode برای سازگاری کامل
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,
+            "-c:v", "libx264",  # ویدیو → H.264
+            "-c:a", "aac",      # صدا → AAC
+            output_path
+        ], check=True)
+
+        return output_path
+
+
+    def convert_avi_to_mp4(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل بدون پسوند + پسوند mp4
+        file_name = os.path.splitext(self.f_name)[0] + ".mp4"
+        output_path = os.path.join(add, file_name)
+
+        # re-encode برای سازگاری کامل
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,
+            "-c:v", "libx264",  # ویدیو → H.264
+            "-c:a", "aac",      # صدا → AAC
+            output_path
+        ], check=True)
+
+        return output_path
+
+
+    def convert_mov_to_avi(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل بدون پسوند + پسوند avi
+        file_name = os.path.splitext(self.f_name)[0] + ".avi"
+        output_path = os.path.join(add, file_name)
+
+        # دستور ffmpeg برای تغییر فرمت
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,    # مسیر فایل ورودی MOV
+            "-c", "copy",       # فقط تغییر container (بدون encode دوباره)
+            output_path
+        ], check=True)
+
+        return output_path
+
+
+    def convert_mkv_to_mov(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل بدون پسوند + پسوند mov
+        file_name = os.path.splitext(self.f_name)[0] + ".mov"
+        output_path = os.path.join(add, file_name)
+
+        # دستور ffmpeg برای تغییر فرمت
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,    # فایل ورودی
+            "-c", "copy",       # فقط تغییر container (بدون افت کیفیت)
+            output_path
+        ], check=True)
+
+        return output_path
+
+    def convert_mov_to_mp4(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل بدون پسوند + پسوند mp4
+        file_name = os.path.splitext(self.f_name)[0] + ".mp4"
+        output_path = os.path.join(add, file_name)
+
+        # دستور ffmpeg برای تغییر فرمت
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,   # مسیر فایل ورودی
+            "-c", "copy",      # فقط تغییر container بدون re-encode
+            output_path
+        ], check=True)
+
+        return output_path
+
+
+    def convert_mkv_to_avi(self):
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        file_name = os.path.splitext(self.f_name)[0] + ".avi"
+        output_path = os.path.join(add, file_name)
+
+        # re-encode برای سازگاری کامل با AVI
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,
+            "-c:v", "libx264",   # ویدیو → H.264
+            "-c:a", "mp3",       # صدا → MP3
+            output_path
+        ], check=True)
+
+        return output_path
+
+
+    def convert_mkv_to_mp4(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل بدون پسوند + پسوند mp4
+        file_name = os.path.splitext(self.f_name)[0] + ".mp4"
+        output_path = os.path.join(add, file_name)
+
+        # دستور ffmpeg برای تغییر فرمت
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,    # مسیر فایل ورودی
+            "-c", "copy",       # فقط تغییر container بدون encode دوباره
+            output_path
+        ], check=True)
+
+        return output_path
+
+    def convert_mp4_to_mov(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل بدون پسوند + پسوند mov
+        file_name = os.path.splitext(self.f_name)[0] + ".mov"
+        output_path = os.path.join(add, file_name)
+
+        # دستور ffmpeg برای تغییر فرمت
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,    # مسیر فایل ورودی
+            "-c", "copy",       # فقط تغییر container بدون encode دوباره
+            output_path
+        ], check=True)
+
+        return output_path
 
     def test_file(self):
         if os.path.exists(self.path):
@@ -55,6 +291,45 @@ class convertor():
         else:
             return False
         
+    def convert_mp4_to_avi(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل بدون پسوند + پسوند avi
+        file_name = os.path.splitext(self.f_name)[0] + ".avi"
+        output_path = os.path.join(add, file_name)
+
+        # دستور ffmpeg برای تغییر فرمت
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,    # مسیر فایل ورودی
+            "-c", "copy",       # فقط تغییر container بدون encode دوباره
+            output_path
+        ], check=True)
+
+        return output_path
+
+
+    def convert_mp4_to_mkv(self):
+        # مسیر فولدر خروجی
+        add = os.path.join(settings.MEDIA_ROOT, 'download')
+        os.makedirs(add, exist_ok=True)
+
+        # اسم فایل بدون پسوند + پسوند mkv
+        file_name = os.path.splitext(self.f_name)[0] + ".mkv"
+        output_path = os.path.join(add, file_name)
+
+        # دستور ffmpeg برای تغییر فرمت
+        subprocess.run([
+            "ffmpeg",
+            "-i", self.path,    # مسیر فایل ورودی
+            "-c", "copy",       # فقط تغییر container بدون encode دوباره
+            output_path
+        ], check=True)
+
+        return output_path
+
 
     def convert_to_png(self):
         # مسیر پوشه خروجی
