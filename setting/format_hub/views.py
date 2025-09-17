@@ -829,9 +829,20 @@ def show_sending(request, file_name,all_type, format):
     # print(f"status = {a.status}")
     # print(f"out put addres = {a.result_path}")
     a.remove_this_file()
-    # print(f"addres = {a.path} removed !")
+    # مسیر کامل فایل
+    file_path = a.result_path
 
-    return render(request, 'sending.html')
+    # تبدیل مسیر کامل به مسیر نسبی نسبت به MEDIA_ROOT
+    relative_path = os.path.relpath(file_path, settings.MEDIA_ROOT)
+    
+    # مسیر قابل استفاده در URL برای مرورگر
+    link_download = settings.MEDIA_URL + relative_path.replace("\\", "/")
+
+    context = {
+        "link_download": link_download,
+    }
+
+    return render(request, 'sending.html', context=context)
 
 
 

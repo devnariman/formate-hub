@@ -6,6 +6,9 @@ SECRET_KEY = 'django-insecure-x=tu5%d@nyz&r729)#t^n9lcp(tv2g@_7ux=_vywi3 mb8rn7o
 DEBUG = True
 ALLOWED_HOSTS = []
 
+# -----------------------------
+# اپ‌ها
+# -----------------------------
 INSTALLED_APPS = [
     'format_hub',
     'django.contrib.admin',
@@ -16,6 +19,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+# -----------------------------
+# Middleware
+# -----------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -31,7 +37,7 @@ ROOT_URLCONF = 'setting.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # اگه یه فولدر عمومی برای تمپلیت داری
+        'DIRS': [BASE_DIR / 'templates'],  # فولدر عمومی برای تمپلیت
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -45,6 +51,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'setting.wsgi.application'
 
+# -----------------------------
+# دیتابیس
+# -----------------------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -59,13 +68,16 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# -----------------------------
+# زبان و زمان
+# -----------------------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
 # -----------------------------
-# تنظیمات استاتیک
+# استاتیک
 # -----------------------------
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
@@ -74,9 +86,16 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / "staticfiles"  # برای collectstatic در پروداکشن
 
 # -----------------------------
-# تنظیمات مدیا
+# مدیا
 # -----------------------------
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'  # فایل‌های آپلود شده اینجا ذخیره میشن
+
+# -----------------------------
+# برای فایل‌های بزرگ یا مسیرهای خاص
+# -----------------------------
+# اگه نیاز باشه می‌تونی حداکثر سایز آپلود و زمان آپلود رو هم محدود کنی
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
