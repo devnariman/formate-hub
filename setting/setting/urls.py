@@ -27,7 +27,7 @@ urlpatterns = [
     path('upload_audio/', views.upload_audio, name='upload_audio'),
     path('upload_video/', views.upload_video, name='upload_video'),
     path('sending/<str:file_name>/<str:all_type>/<str:format>/', views.show_sending, name='show_sending'),
-
+    path("sending/<str:file_name>/<str:all_type>//" , views.show_sending2 , name="show_sending2")
 ]
 
 if settings.DEBUG:

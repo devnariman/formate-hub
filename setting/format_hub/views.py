@@ -5,6 +5,8 @@ from django.conf import settings
 import subprocess
 import time
 from PIL import Image
+from django.http import HttpResponse
+import shutil
 
 class convertor():
     def __init__(self , file_name,all_type , formate):
@@ -13,11 +15,344 @@ class convertor():
         self.type = all_type
         self.path = self.get_input_path()
         self.download_file = os.path.join(settings.MEDIA_ROOT, 'download')
-        self.status = self.test_file()
+        try:
+            self.status = self.test_file()
+        except:
+            self.status = 110
         self.ext = os.path.splitext(self.f_name)[1]
         self.ext = self.ext[1:]
-        if self.status == True:
+        self.html110 = """
+        <html>
+            <head>
+                <meta http-equiv="refresh" content="3;url=/main" />
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f9f9f9;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                    }
+                    .error-box {
+                        background: #fff;
+                        border: 1px solid #ddd;
+                        border-radius: 6px;
+                        padding: 30px 40px;
+                        text-align: center;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                    }
+                    .error-title {
+                        font-size: 22px;
+                        color: #d9534f;
+                        margin-bottom: 10px;
+                    }
+                    .error-message {
+                        font-size: 16px;
+                        color: #555;
+                        margin-bottom: 15px;
+                    }
+                    .redirect {
+                        font-size: 14px;
+                        color: #888;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="error-box">
+                    <div class="error-title">⚠ Base Error 110</div>
+                    <div class="error-message">Something went wrong.</div>
+                    <div class="redirect">Redirecting to main page in 3 seconds...</div>
+                </div>
+            </body>
+        </html>
+        """
 
+        self.html120 = """
+        <html>
+            <head>
+                <meta http-equiv="refresh" content="3;url=/main" />
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f9f9f9;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                    }
+                    .error-box {
+                        background: #fff;
+                        border: 1px solid #ddd;
+                        border-radius: 6px;
+                        padding: 30px 40px;
+                        text-align: center;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                    }
+                    .error-title {
+                        font-size: 22px;
+                        color: #d9534f;
+                        margin-bottom: 10px;
+                    }
+                    .error-message {
+                        font-size: 16px;
+                        color: #555;
+                        margin-bottom: 15px;
+                    }
+                    .redirect {
+                        font-size: 14px;
+                        color: #888;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="error-box">
+                    <div class="error-title">⚠ No Category Selected</div>
+                    <div class="error-message">Please choose a category before proceeding.</div>
+                    <div class="redirect">Redirecting to main page in 3 seconds...</div>
+                </div>
+            </body>
+        </html>
+        """
+
+        self.html160 = """
+        <html>
+            <head>
+                <meta http-equiv="refresh" content="4;url=/main" />
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f9f9f9;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                    }
+                    .error-box {
+                        background: #fff;
+                        border: 1px solid #e6e6e6;
+                        border-radius: 8px;
+                        padding: 28px 38px;
+                        text-align: center;
+                        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+                        max-width: 420px;
+                    }
+                    .error-title {
+                        font-size: 20px;
+                        color: #d9534f;
+                        margin-bottom: 8px;
+                        font-weight: 700;
+                    }
+                    .error-message {
+                        font-size: 15px;
+                        color: #444;
+                        margin-bottom: 16px;
+                    }
+                    .hint {
+                        font-size: 13px;
+                        color: #777;
+                        margin-bottom: 18px;
+                    }
+                    .actions {
+                        display: flex;
+                        gap: 10px;
+                        justify-content: center;
+                    }
+                    .btn {
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        border: none;
+                        text-decoration: none;
+                        font-size: 14px;
+                        cursor: pointer;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+                    }
+                    .btn-primary {
+                        background: #007bff;
+                        color: #fff;
+                    }
+                    .btn-secondary {
+                        background: transparent;
+                        color: #007bff;
+                        border: 1px solid #cfe3ff;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="error-box" role="alert" aria-live="polite">
+                    <div class="error-title">⚠ Already Converted</div>
+                    <div class="error-message">This file has already been downloaded and converted once.</div>
+                    <div class="hint">You will be redirected to the main page in 4 seconds.</div>
+                    <div class="actions">
+                        <a href="/main" class="btn btn-primary">Go to downloads</a>
+                        <a href="/main" class="btn btn-secondary">Go to main now</a>
+                    </div>
+                </div>
+            </body>
+        </html>
+        """
+
+        self.html130 = """
+        <html>
+            <head>
+                <meta http-equiv="refresh" content="3;url=/main" />
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f9f9f9;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                    }
+                    .error-box {
+                        background: #fff;
+                        border: 1px solid #e6e6e6;
+                        border-radius: 8px;
+                        padding: 28px 38px;
+                        text-align: center;
+                        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+                        max-width: 420px;
+                    }
+                    .error-title {
+                        font-size: 20px;
+                        color: #d9534f;
+                        margin-bottom: 8px;
+                        font-weight: 700;
+                    }
+                    .error-message {
+                        font-size: 15px;
+                        color: #444;
+                        margin-bottom: 16px;
+                    }
+                    .hint {
+                        font-size: 13px;
+                        color: #777;
+                        margin-bottom: 18px;
+                    }
+                    .actions {
+                        display: flex;
+                        gap: 10px;
+                        justify-content: center;
+                    }
+                    .btn {
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        border: none;
+                        text-decoration: none;
+                        font-size: 14px;
+                        cursor: pointer;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+                    }
+                    .btn-primary {
+                        background: #007bff;
+                        color: #fff;
+                    }
+                    .btn-secondary {
+                        background: transparent;
+                        color: #007bff;
+                        border: 1px solid #cfe3ff;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="error-box" role="alert" aria-live="polite">
+                    <div class="error-title">⚠ Unsupported Image Format</div>
+                    <div class="error-message">The format of your uploaded image is not supported by our site.</div>
+                    <div class="hint">Redirecting to main page in 3 seconds...</div>
+                    <div class="actions">
+                        <a href="/main" class="btn btn-primary">Go to main now</a>
+                    </div>
+                </div>
+            </body>
+        </html>
+        """
+
+        self.html140_150 = """
+        <html>
+            <head>
+                <meta http-equiv="refresh" content="3;url=/main" />
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f9f9f9;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                    }
+                    .error-box {
+                        background: #fff;
+                        border: 1px solid #e6e6e6;
+                        border-radius: 8px;
+                        padding: 28px 38px;
+                        text-align: center;
+                        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+                        max-width: 460px;
+                    }
+                    .error-title {
+                        font-size: 20px;
+                        color: #d9534f;
+                        margin-bottom: 8px;
+                        font-weight: 700;
+                    }
+                    .error-message {
+                        font-size: 15px;
+                        color: #444;
+                        margin-bottom: 16px;
+                    }
+                    .hint {
+                        font-size: 13px;
+                        color: #777;
+                        margin-bottom: 18px;
+                    }
+                    .actions {
+                        display: flex;
+                        gap: 10px;
+                        justify-content: center;
+                    }
+                    .btn {
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        border: none;
+                        text-decoration: none;
+                        font-size: 14px;
+                        cursor: pointer;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+                    }
+                    .btn-primary {
+                        background: #007bff;
+                        color: #fff;
+                    }
+                    .btn-secondary {
+                        background: transparent;
+                        color: #007bff;
+                        border: 1px solid #cfe3ff;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="error-box" role="alert" aria-live="polite">
+                    <div class="error-title">⚠ Unsupported File Format</div>
+                    <div class="error-message">
+                        The format of your uploaded file is not supported. <br>
+                        This applies to images, videos, and audio files.
+                    </div>
+                    <div class="hint">Redirecting to the main page in 3 seconds...</div>
+                    <div class="actions">
+                        <a href="/main" class="btn btn-primary">Go to main now</a>
+                    </div>
+                </div>
+            </body>
+        </html>
+        """
+
+        if self.status == True:
 
             if self.type == "image":
                 if self.ext == "png":
@@ -56,6 +391,9 @@ class convertor():
                         self.result_path = self.convert_bmp_to_gif()
                     elif self.format == "bmp":
                         self.result_path = self.path
+                else:
+                    self.status = 130
+
             elif self.type == "video":
                 if self.ext == "mp4":
                     if self.format == "MKV":
@@ -93,6 +431,9 @@ class convertor():
                         self.result_path = self.convert_avi_to_mov()
                     elif self.format == "mkv":
                         self.result_path = self.convert_avi_to_mkv()
+                else:
+                    self.status = 140
+
             elif self.type == "audio":
                 if self.ext == "mp3":
                     if self.format == "mp3":
@@ -130,12 +471,13 @@ class convertor():
                         self.result_path = self.convert_flac_to_ogg()
                     elif self.format == "flac":
                         self.result_path = self.path
-
-            
+                else:
+                    self.status = 150
+      
             else:
-                None
+                self.status = 120
         else:
-            None
+            self.status = 160
 
     def convert_flac_to_mp3(self):
         # مسیر فولدر خروجی
@@ -814,36 +1156,134 @@ class convertor():
     def remove_this_file(self):
         if os.path.isfile(self.path):
             os.remove(self.path)
-            print(f"{self.path} حذف شد.")
         else:
-            print(f"{self.path} وجود ندارد یا فایل نیست.")
+            None
+
+    def make_download_link(self):
+        # مسیر کامل فایل
+        file_path = self.result_path
+        # تبدیل مسیر کامل به مسیر نسبی نسبت به MEDIA_ROOT
+        relative_path = os.path.relpath(file_path, settings.MEDIA_ROOT)
+        # مسیر قابل استفاده در URL برای مرورگر
+        link_download = settings.MEDIA_URL + relative_path.replace("\\", "/")
+        return link_download
 
 def show_main(request):
     return render(request, 'main.html')
 
 
-def show_sending(request, file_name,all_type, format):
+def show_sending(request, file_name,all_type = "", format = ""):
     time.sleep(1)
-    a = convertor(file_name , all_type , format)
+    file_convertor = convertor(file_name , all_type , format)
 
-    # print(f"status = {a.status}")
-    # print(f"out put addres = {a.result_path}")
-    a.remove_this_file()
-    # مسیر کامل فایل
-    file_path = a.result_path
+    if file_convertor.status == True:
+        if file_convertor.ext == file_convertor.format:
+            try: 
+                file_convertor.result_path = shutil.move(file_convertor.result_path, file_convertor.download_file) 
+            except:
+                file_convertor.remove_this_file()
+                adde = file_convertor.result_path
+                file_convertor.result_path = adde.replace("image" , "download")
+        else:    
+            file_convertor.remove_this_file()
 
-    # تبدیل مسیر کامل به مسیر نسبی نسبت به MEDIA_ROOT
-    relative_path = os.path.relpath(file_path, settings.MEDIA_ROOT)
+
+        link_download = file_convertor.make_download_link()
+
+        context = {
+            "link_download": link_download,
+        }
+        return render(request, 'sending.html', context=context)
+    elif file_convertor.status == 110:
+        return HttpResponse(file_convertor.html110)
+    elif file_convertor.status == 120:
+        return HttpResponse(file_convertor.html120)
+    elif file_convertor.status == 160:
+        return HttpResponse(file_convertor.html160)
+    elif file_convertor.status == 130:
+        return HttpResponse(file_convertor.html130) 
+    elif file_convertor.status == 140 or file_convertor == 150 : 
+        return HttpResponse(file_convertor.html140_150)
+
     
-    # مسیر قابل استفاده در URL برای مرورگر
-    link_download = settings.MEDIA_URL + relative_path.replace("\\", "/")
-
-    context = {
-        "link_download": link_download,
-    }
-
-    return render(request, 'sending.html', context=context)
-
+def show_sending2(request, file_name,all_type = ""):
+    html = """
+    <html>
+        <head>
+            <meta http-equiv="refresh" content="3;url=/main" />
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f9f9f9;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    margin: 0;
+                }
+                .error-box {
+                    background: #fff;
+                    border: 1px solid #e6e6e6;
+                    border-radius: 8px;
+                    padding: 28px 38px;
+                    text-align: center;
+                    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+                    max-width: 420px;
+                }
+                .error-title {
+                    font-size: 20px;
+                    color: #d9534f;
+                    margin-bottom: 8px;
+                    font-weight: 700;
+                }
+                .error-message {
+                    font-size: 15px;
+                    color: #444;
+                    margin-bottom: 16px;
+                }
+                .hint {
+                    font-size: 13px;
+                    color: #777;
+                    margin-bottom: 18px;
+                }
+                .actions {
+                    display: flex;
+                    gap: 10px;
+                    justify-content: center;
+                }
+                .btn {
+                    padding: 8px 14px;
+                    border-radius: 6px;
+                    border: none;
+                    text-decoration: none;
+                    font-size: 14px;
+                    cursor: pointer;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+                }
+                .btn-primary {
+                    background: #007bff;
+                    color: #fff;
+                }
+                .btn-secondary {
+                    background: transparent;
+                    color: #007bff;
+                    border: 1px solid #cfe3ff;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="error-box" role="alert" aria-live="polite">
+                <div class="error-title">⚠ No Output Format Selected</div>
+                <div class="error-message">You did not select any output format while converting your file.</div>
+                <div class="hint">Redirecting to main page in 3 seconds...</div>
+                <div class="actions">
+                    <a href="/main" class="btn btn-primary">Go to main now</a>
+                </div>
+            </div>
+        </body>
+    </html>
+    """
+    return HttpResponse(html)
 
 
 def upload_image(request):
