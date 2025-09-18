@@ -102,7 +102,6 @@ dropArea.addEventListener("drop", (e) => {
     }
 });
 
-// آپلود فایل و تغییر href
 convertBtn.addEventListener("click", function(e) {
     e.preventDefault(); // جلوگیری از پرش اولیه
 
@@ -119,10 +118,10 @@ convertBtn.addEventListener("click", function(e) {
     fetch("/upload_image/", {
         method: "POST",
         body: formData,
-    headers: {
-        'X-CSRFToken': getCookie('csrftoken')  // حتماً کلید همین باشه
-    },
-    credentials: 'same-origin'  // اضافه کن تا کوکی‌ها ارسال بشن
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')  // حتماً کلید همین باشه
+        },
+        credentials: 'same-origin'  // ارسال کوکی CSRF
     })
     .then(response => response.json())
     .then(data => {
@@ -133,7 +132,6 @@ convertBtn.addEventListener("click", function(e) {
         alert("Error uploading file.");
     });
 });
-
 
 
 
@@ -179,7 +177,6 @@ videoDropArea.addEventListener("drop", (e) => {
     }
 });
 
-// آپلود فایل و تغییر href
 videoConvertBtn.addEventListener("click", function(e) {
     e.preventDefault(); // جلوگیری از پرش صفحه
 
@@ -195,15 +192,14 @@ videoConvertBtn.addEventListener("click", function(e) {
     fetch("/upload_video/", { // مسیر سرور برای ویدیو
         method: "POST",
         body: formData,
-    headers: {
-        'X-CSRFToken': getCookie('csrftoken')  // حتماً کلید همین باشه
-    },
-    credentials: 'same-origin'  // اضافه کن تا کوکی‌ها ارسال بشن
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')  // حتماً کلید همین باشه
+        },
+        credentials: 'same-origin'  // ارسال کوکی CSRF
     })
     .then(response => response.json())
     .then(data => {
         // بعد از آپلود موفق، ریدایرکت
-        // دقت کن که video_type باید قبل از این تعریف شود یا ثابت باشه
         window.location.href = `/sending/${data.filename}/${all_type}/${video_type}/`;
     })
     .catch(() => {
@@ -274,20 +270,20 @@ audioConvertBtn.addEventListener("click", function(e) {
     fetch("/upload_audio/", {
         method: "POST",
         body: formData,
-    headers: {
-        'X-CSRFToken': getCookie('csrftoken')  // حتماً کلید همین باشه
-    },
-    credentials: 'same-origin'  // اضافه کن تا کوکی‌ها ارسال بشن
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')  // حتماً کلید همین باشه
+        },
+        credentials: 'same-origin'  // برای ارسال کوکی
     })
     .then(response => response.json())
     .then(data => {
-        // بعد از آپلود موفق
         window.location.href = `/sending/${data.filename}/${all_type}/${audio_type}/`;
     })
     .catch(() => {
         alert("Error uploading audio.");
     });
 });
+
 
 
 
